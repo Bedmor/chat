@@ -9,7 +9,7 @@ const port = process.env.PORT || 8080;
 const server = http.createServer((req, res) => {
     // Get the URL path, defaulting to index.html for root
     let urlPath = req.url === '/' ? '/index.html' : req.url;
-    
+
     // Remove query parameters if present
     urlPath = urlPath.split('?')[0];
 
