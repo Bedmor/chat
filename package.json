@@ -4,8 +4,7 @@
   "description": "Simple WebSocket server for chat app",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "npm start"
+    "start": "node server.js"
   },
   "dependencies": {
     "ws": "^8.16.0"
