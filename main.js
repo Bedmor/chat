@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Using a public echo server for demonstration purposes
         // In a real app, this would be your own backend URL
         // To test with the local server we created: 'ws://localhost:8080'
-        const wsUrl = "https://chatto-zzpd.onrender.com"
+        const wsUrl = "wss://chatto-zzpd.onrender.com"
 
         console.log(`Connecting to ${wsUrl}...`);
         socket = new WebSocket(wsUrl);
