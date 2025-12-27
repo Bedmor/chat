@@ -35,16 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function connectWebSocket() {
-        // Determine if we are running locally or in production
-        const isLocal = location.hostname === 'localhost' ||
-            location.hostname === '127.0.0.1' ||
-            location.protocol === 'file:';
+        let wsUrl;
 
-        // Use localhost for local development, otherwise use the Render URL
-        const wsUrl = isLocal
-            ? 'ws://localhost:8080'
-            : 'wss://chatto-zzpd.onrender.com';
-
+        // 1. If running on Localhost
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            wsUrl = 'ws://localhost:8080';
+        }
+        // 2. If running on Render (served by the Node server)
+        else if (location.hostname.includes('onrender.com')) {
+            const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            wsUrl = `${protocol}//${location.host}`;
+        }
+        // 3. If running on GitHub Pages (or file://), connect to the Render backend
+        else {
+            wsUrl = 'wss://chat-iqw0.onrender.com';
+        }
         console.log(`Connecting to ${wsUrl}...`);
         socket = new WebSocket(wsUrl);
 
