@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const messagesArea = document.getElementById('messages-area');
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
+    const imageInput = document.getElementById('image-input');
+    const attachButton = document.getElementById('attach-button');
 
     let username = localStorage.getItem('chat_username');
     let socket;
@@ -124,6 +126,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Image Upload Logic
+    attachButton.addEventListener('click', () => {
+        imageInput.click();
+    });
+
+    imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                alert('Image is too large. Please select an image under 2MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64String = event.target.result;
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    const messageData = {
+                        user: username,
+                        text: base64String,
+                        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    };
+                    socket.send(JSON.stringify(messageData));
+                }
+            };
+            reader.readAsDataURL(file);
+            
+            // Reset input so the same file can be selected again
+            imageInput.value = '';
+        }
+    });
+
     function addMessage(user, text, time, isSentByMe) {
         // Determine if the message is from the current user based on name
         // (In a real app, use IDs)
@@ -135,6 +169,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const avatarLetter = user.charAt(0).toUpperCase();
         const avatarColor = getAvatarColor(user);
 
+        // Check if the text is a base64 image
+        const isImage = text.startsWith('data:image/');
+        const messageContent = isImage 
+            ? `<img src="${text}" class="max-w-full rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onclick="window.open('${text}')">`
+            : `<p class="text-sm">${escapeHtml(text)}</p>`;
+
         let content = '';
 
         if (isMe) {
@@ -145,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="font-bold text-sm text-gray-900 dark:text-gray-100">You</span>
                     </div>
                     <div class="bg-primary text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-left">
-                        <p class="text-sm">${escapeHtml(text)}</p>
+                        ${messageContent}
                     </div>
                 </div>
                 <div style="background-color: ${avatarColor}" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ml-3 mt-1 shadow-sm">
@@ -163,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="text-xs text-gray-500 dark:text-gray-400">${time}</span>
                     </div>
                     <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 dark:border-gray-700">
-                        <p class="text-sm">${escapeHtml(text)}</p>
+                        ${messageContent}
                     </div>
                 </div>
             `;
