@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
             reader.readAsDataURL(file);
-            
+
             // Reset input so the same file can be selected again
             imageInput.value = '';
         }
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check if the text is a base64 image
         const isImage = text.startsWith('data:image/');
-        const messageContent = isImage 
+        const messageContent = isImage
             ? `<img src="${text}" class="max-w-full rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onclick="window.open('${text}')">`
             : `<p class="text-sm">${escapeHtml(text)}</p>`;
 
