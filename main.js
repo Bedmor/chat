@@ -134,8 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
     imageInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 2 * 1024 * 1024) { // 2MB limit
-                alert('Image is too large. Please select an image under 2MB.');
+            if (file.size > 8 * 1024 * 1024) { // 8MB limit
+                alert('Image is too large. Please select an image under 8MB.');
                 return;
             }
 
