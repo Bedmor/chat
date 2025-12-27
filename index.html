@@ -211,6 +211,7 @@
               class="w-full py-2 px-4 bg-gray-100 dark:bg-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-primary text-sm"
             />
             <button
+              id="emoji-button"
               class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-primary"
             >
               <svg
@@ -227,6 +228,10 @@
                 ></path>
               </svg>
             </button>
+            <!-- Emoji Picker -->
+            <div id="emoji-picker" class="hidden absolute bottom-12 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-2 w-64 max-h-64 overflow-y-auto grid grid-cols-6 gap-1 z-50">
+                <!-- Emojis will be populated by JS -->
+            </div>
           </div>
           <button
             id="send-button"
